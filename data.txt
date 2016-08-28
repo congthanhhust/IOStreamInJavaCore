@@ -1,0 +1,34 @@
+﻿Ok so here's an explanation:
+
+but before you start, you should understand streaming concept in the Java because all the readers in java are built upon that.
+
+File Streaming File streaming is carried out by FileInputStream object instance in Java.
+
+// read byte by byte and store into this variable
+int byt;
+while((byt = fileInputStream.read()) != -1) {
+    fileOutputStream.write(byt);
+} 
+This objects actually reads a byte(8-bit) at a time and writes it to the given file. It's good when you are working with raw data file, such as images or audio (same but uses AudioInputStream object), etc. but for the text files, it is inconvenient or slower, because it waste the time looping though. you also need to provide a text file character set otherwise whatever you write you won't see in the file, you would just see some random text and signs.
+
+File Reading (basically streaming with character) FileReader is used for file reading, so the operation is as,
+
+int c;
+while ( (c = fileReader.read()) != -1) { // some logic }
+instead of fetching a byte each time, it fetches 2 bytes a time. but still runs the same number of times as the characters in your file. But it is better then byte steaming such as 'FileInputStream' when you're dealing with files. but the both instances use an integer variable to store the value coming from an input file. Byte stream stores 8 bits into a variable and FileReader stores 16 bits, but here, you don't have to specify file's character set and some few more properties, it automatically does it for you, and also supports internationalization. but it's still slower.
+
+Buffering streams Now file buffering is faster than file stream reading. It's the same concept as you see on youtube. youtube buffers some amount of video before it actually starts playing it, so you can have flawless video watching experience.
+
+So the file buffering uses BufferedReader object instance, and you need to specify which stream you want to buffer, in this case it's a file so you need to pass a FileReader object.
+
+BufferedReader br = new BufferedReader( new FileReader("example.txt") );
+now here, bufferedReader buffers the file means it keeps reading a file one by one character, until it hits '\n', '\r\n' (new line) character and stores fetched characters into a string (in short fetches the lines and stores it into buffer).
+
+String line;
+while ((line = br.readLine()) != null) {
+    printWriter.println(line);
+}
+now, you can see instead of storing each bytes or 2bytes value in a int variable, it stores the whole line into a memory and works on it. But buffer reader can not work alone, because it just buffers so you need to specify which stream you want to buffer? It could be a file stream as you saw earlier or it could be a console, as
+
+BufferedReader br = new BufferedReader(new inputStreamReader(System.in));
+then it will scan a whole line from the console. that's why you use bufferedReader.readLine() in java to collect the input from a console.
